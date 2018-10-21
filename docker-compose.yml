@@ -11,6 +11,13 @@ services:
         environment:
             - "DB_PORT=3306"
             - "DB_HOST=database"
+        links:
+            - database
+        depends_on:
+            - runtime
+            - database
+        networks:
+            - internal-net
 
     # The Web Server
     web:
@@ -22,19 +29,49 @@ services:
             - app
         ports:
             - 8080:80
+        networks:
+            - internal-net
 
     # The Database
     database:
         image: mysql:5.6
-        volumes:
-            - dbdata:/var/lib/mysql
         environment:
-            - "MYSQL_DATABASE=homestead"
-            - "MYSQL_USER=homestead"
+            - "MYSQL_DATABASE=findyourway"
+            - "MYSQL_USER=findyourway"
             - "MYSQL_PASSWORD=secret"
             - "MYSQL_ROOT_PASSWORD=secret"
         ports:
                 - "33061:3306"
+        networks:
+            - internal-net
 
-volumes:
-    dbdata:
+    # The Administration Panel
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        links:
+            - database
+        environment:
+            PMA_PORT: 3306
+            PMA_HOST: database
+            PMA_USER: findyourway
+            PMA_PASSWORD: secret
+        ports:
+            - "8181:80"
+        restart: always
+        depends_on: 
+            - database
+        networks:
+            - internal-net
+
+    # Runtime container
+    # This container is used just to execute commands at the runtime on the volumes
+    runtime:
+        build:
+            context: .
+            dockerfile: runtime.dockerfile
+        volumes:
+            - ./findyourway:/code
+        working_dir: /code
+networks:
+  internal-net:
+    driver: bridge
