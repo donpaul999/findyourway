@@ -14,6 +14,7 @@ services:
         links:
             - database
         depends_on:
+            - runtime
             - database
         networks:
             - internal-net
@@ -62,6 +63,15 @@ services:
         networks:
             - internal-net
 
+    # Runtime container
+    # This container is used just to execute commands at the runtime on the volumes
+    runtime:
+        build:
+            context: .
+            dockerfile: runtime.dockerfile
+        volumes:
+            - ./findyourway:/code
+        working_dir: /code
 networks:
   internal-net:
     driver: bridge
