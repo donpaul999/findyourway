@@ -1,2 +1,2 @@
-Find your way
+Find Your Way
 ===
