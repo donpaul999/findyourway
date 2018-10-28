@@ -1,14 +1,14 @@
 Application architecture
 ===
 
-#Frontend
+# Frontend
 Frontend components should be pretty minimalistic for the first release and they should include basic functionalities about searching and sorting in the dataset. The website should be one-page only and it is described as follows:
 * It should contain some layout management
 * Search box that should be able to submit requests to the API
 * Display container that should receive that from the API and display it in a sorted manner
 Summarizing, the components to be implemented are: Grid Manager Component, Search Component, Dataset Display Component
 
-#Backend
+# Backend
 * The database should consit of 2 tables:
     1. 'Subjects' - Each subject should be related to a list of faculties
     2. 'Faculties' - Each faculty should contain the following fields: 
